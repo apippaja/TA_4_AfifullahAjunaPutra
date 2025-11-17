@@ -51,7 +51,7 @@ Sebuah aplikasi web modern untuk mengelola daftar kontak dengan antarmuka yang i
 2. Langkah Instalasi
 
 - Download atau clone repository
-- 
+  
 <img width="380" height="41" alt="image" src="https://github.com/user-attachments/assets/c5b07253-668f-417f-90ff-95815f781a8c" />
 
 3. Letakkan file di web server
@@ -66,6 +66,7 @@ Sebuah aplikasi web modern untuk mengelola daftar kontak dengan antarmuka yang i
 5. Login dengan akun default
 
 Username: admin
+
 Password : admin123
 
 
