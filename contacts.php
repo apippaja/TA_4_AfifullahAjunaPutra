@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// Cek jika user belum login, redirect ke halaman login
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Handle logout
 if (isset($_GET['logout'])) {
     session_destroy();
     header('Location: login.php');
@@ -24,7 +22,6 @@ $login_time = $_SESSION['login_time'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Kontak</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -451,16 +448,13 @@ $login_time = $_SESSION['login_time'];
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Data kontak akan disimpan di sessionStorage
         let contacts = JSON.parse(sessionStorage.getItem('contacts')) || [];
         let currentEditId = null;
         let deleteId = null;
 
-        // DOM Elements
         const contactForm = document.getElementById('contactForm');
         const contactTableBody = document.getElementById('contactTableBody');
         const emptyMessage = document.getElementById('emptyMessage');
@@ -474,7 +468,6 @@ $login_time = $_SESSION['login_time'];
         const totalContacts = document.getElementById('totalContacts');
         const recentContacts = document.getElementById('recentContacts');
 
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             renderContacts();
             updateStats();
@@ -483,7 +476,6 @@ $login_time = $_SESSION['login_time'];
             cancelBtn.addEventListener('click', resetForm);
             searchInput.addEventListener('input', handleSearch);
             
-            // Validasi form real-time
             const inputs = contactForm.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('blur', validateField);
@@ -491,7 +483,6 @@ $login_time = $_SESSION['login_time'];
             });
         });
 
-        // Fungsi untuk menampilkan alert
         function showAlert(message, type) {
             const alert = document.createElement('div');
             alert.className = `alert alert-${type} alert-dismissible fade show`;
@@ -504,25 +495,21 @@ $login_time = $_SESSION['login_time'];
             `;
             alertContainer.appendChild(alert);
             
-            // Auto dismiss setelah 4 detik
             setTimeout(() => {
                 if (alert.parentNode) {
                     alert.parentNode.removeChild(alert);
                 }
             }, 4000);
         }
-
-        // Update statistics
         function updateStats() {
             totalContacts.textContent = contacts.length;
             
-            // Hitung kontak yang dibuat dalam 24 jam terakhir
+            
             const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
             const recent = contacts.filter(contact => parseInt(contact.id) > oneDayAgo);
             recentContacts.textContent = recent.length;
         }
 
-        // Validasi field individual
         function validateField(e) {
             const field = e.target;
             
@@ -546,19 +533,16 @@ $login_time = $_SESSION['login_time'];
             return true;
         }
 
-        // Validasi email
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
 
-        // Validasi nomor telepon
         function isValidPhone(phone) {
             const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
             return phoneRegex.test(phone);
         }
 
-        // Validasi form lengkap
         function validateForm() {
             let isValid = true;
             
@@ -566,7 +550,7 @@ $login_time = $_SESSION['login_time'];
             const phone = document.getElementById('phone');
             const email = document.getElementById('email');
             
-            // Validasi nama
+           
             if (!name.value.trim()) {
                 name.classList.add('is-invalid');
                 isValid = false;
@@ -574,7 +558,6 @@ $login_time = $_SESSION['login_time'];
                 name.classList.remove('is-invalid');
             }
             
-            // Validasi telepon
             if (!phone.value.trim()) {
                 phone.classList.add('is-invalid');
                 isValid = false;
@@ -585,7 +568,7 @@ $login_time = $_SESSION['login_time'];
                 phone.classList.remove('is-invalid');
             }
             
-            // Validasi email (opsional)
+        
             if (email.value && !isValidEmail(email.value)) {
                 email.classList.add('is-invalid');
                 isValid = false;
@@ -596,7 +579,7 @@ $login_time = $_SESSION['login_time'];
             return isValid;
         }
 
-        // Handle form submission
+    
         function handleFormSubmit(e) {
             e.preventDefault();
             
@@ -614,7 +597,7 @@ $login_time = $_SESSION['login_time'];
             // Handle foto profil
             let photo = '';
             if (photoInput.files && photoInput.files[0]) {
-                // Validasi ukuran file (maks 5MB)
+            
                 if (photoInput.files[0].size > 5 * 1024 * 1024) {
                     showAlert('Ukuran file terlalu besar. Maksimal 5MB.', 'danger');
                     return;
@@ -631,10 +614,10 @@ $login_time = $_SESSION['login_time'];
             }
         }
 
-        // Simpan kontak (tambah atau edit)
+    
         function saveContact(name, phone, email, address, photo) {
             if (currentEditId) {
-                // Edit kontak yang sudah ada
+            
                 const index = contacts.findIndex(contact => contact.id === currentEditId);
                 if (index !== -1) {
                     contacts[index] = {
@@ -649,7 +632,7 @@ $login_time = $_SESSION['login_time'];
                     showAlert('Kontak berhasil diperbarui!', 'success');
                 }
             } else {
-                // Tambah kontak baru
+        
                 const newContact = {
                     id: Date.now().toString(),
                     name,
@@ -664,16 +647,16 @@ $login_time = $_SESSION['login_time'];
                 showAlert('Kontak berhasil ditambahkan!', 'success');
             }
             
-            // Simpan ke sessionStorage
+    
             sessionStorage.setItem('contacts', JSON.stringify(contacts));
             
-            // Reset form dan render ulang daftar kontak
+        
             resetForm();
             renderContacts();
             updateStats();
         }
 
-        // Reset form
+    
         function resetForm() {
             contactForm.reset();
             currentEditId = null;
@@ -683,14 +666,14 @@ $login_time = $_SESSION['login_time'];
             submitIcon.className = 'bi bi-check-circle';
             cancelBtn.style.display = 'none';
             
-            // Reset kelas validasi
+        
             const inputs = contactForm.querySelectorAll('input, textarea');
             inputs.forEach(input => {
                 input.classList.remove('is-valid', 'is-invalid');
             });
         }
 
-        // Edit kontak
+
         function editContact(id) {
             const contact = contacts.find(contact => contact.id === id);
             if (!contact) return;
@@ -708,18 +691,18 @@ $login_time = $_SESSION['login_time'];
             submitIcon.className = 'bi bi-arrow-clockwise';
             cancelBtn.style.display = 'block';
             
-            // Scroll ke form
+
             contactForm.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Hapus kontak
+    
         function deleteContact(id) {
             deleteId = id;
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
             deleteModal.show();
         }
 
-        // Konfirmasi hapus
+       
         document.getElementById('confirmDelete').addEventListener('click', function() {
             if (deleteId) {
                 contacts = contacts.filter(contact => contact.id !== deleteId);
@@ -728,7 +711,7 @@ $login_time = $_SESSION['login_time'];
                 updateStats();
                 showAlert('Kontak berhasil dihapus!', 'success');
                 
-                // Tutup modal
+                
                 const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
                 deleteModal.hide();
                 
@@ -736,7 +719,7 @@ $login_time = $_SESSION['login_time'];
             }
         });
 
-        // Render daftar kontak
+
         function renderContacts(filteredContacts = null) {
             const contactsToRender = filteredContacts || contacts;
             
@@ -785,7 +768,6 @@ $login_time = $_SESSION['login_time'];
             contactTableBody.innerHTML = tableHTML;
         }
 
-        // Pencarian kontak
         function handleSearch(e) {
             const searchTerm = e.target.value.toLowerCase();
             
