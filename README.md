@@ -65,8 +65,8 @@ Sebuah aplikasi web modern untuk mengelola daftar kontak dengan antarmuka yang i
 
 5. Login dengan akun default
 
-Username: admin
+- Username: admin
 
-Password : admin123
+- Password : admin123
 
 
